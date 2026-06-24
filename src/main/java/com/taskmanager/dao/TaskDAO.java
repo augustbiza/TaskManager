@@ -43,14 +43,32 @@ public class TaskDAO {
             }
 
         } catch(SQLException e) {
-            throw new DAOException("Error finding taks", e);
+            throw new DAOException("Error finding task", e);
+        }
+
+        return null;
+    }
+
+    public Task findByTitle(String title) {
+        String sql = "SELECT * FROM tasks WHERE title = ?";
+
+        try(Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement sm = conn.prepareStatement(sql)) {
+            sm.setString(1, title);
+
+            ResultSet rs = sm.executeQuery();
+            if(rs.next()) {
+                return new Task(rs.getLong("id"), rs.getString("title"), rs.getBoolean("completed"));
+            }
+        } catch(SQLException e) {
+            throw new DAOException("Error finding task", e);
         }
 
         return null;
     }
 
     public List<Task> findAll() {
-        String sql = "SELECT * FROM tasks";
+        String sql = "SELECT * FROM tasks ORDER BY id";
 
         List<Task> tasks = new ArrayList<>();
 

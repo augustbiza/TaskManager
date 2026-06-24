@@ -12,6 +12,10 @@ public class TaskService {
         this.taskDAO = new TaskDAO();
     }
 
+    public TaskService(TaskDAO dao) {
+        this.taskDAO = dao;
+    }
+
     public void createTask(String title) {
         
         validadeTitle(title);
@@ -22,6 +26,16 @@ public class TaskService {
 
     public List<Task> getAllTasks() {
         return taskDAO.findAll();
+    }
+
+    public Task getTaskbyId(long id) {
+        validateId(id);
+        return taskDAO.findById(id);
+    }
+
+    public Task getTaskByTitle(String title) {
+        validadeTitle(title);
+        return taskDAO.findByTitle(title);        
     }
 
     public void deleteTask(long id) {
